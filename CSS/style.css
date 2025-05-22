@@ -42,6 +42,17 @@ body, html {
   border-radius: 20px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
+select {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 10px;
+  background-color: white;
+  color: grey;
+  font-size: 14px;
+  box-sizing: border-box;
+}
 
 .form-box h1 {
   text-align: center;
