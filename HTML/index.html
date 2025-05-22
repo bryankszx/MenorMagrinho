@@ -1,27 +1,29 @@
-HTML
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cadastro Educador</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../CSS/style.css" />
 </head>
 <body>
   <div class="container">
-    <form class="formulario">
+    <div class="overlay"></div>
+    <div class="form-box">
       <h1>CADASTRO EDUCADOR</h1>
-      
-      <input type="text" placeholder="Nome">
-      <input type="text" placeholder="Cargo">
-      <input type="email" placeholder="Email">
-      <input type="tel" placeholder="Telefone">
-      <input type="password" placeholder="Senha">
-      <input type="password" placeholder="Confirmar Senha">
-      
-      <button type="submit">Finalizar Cadastro</button>
-    </form>
+
+      <form id="cadastroForm">
+        <input type="text" placeholder="Nome" required />
+        <input type="text" placeholder="Cargo" required />
+        <input type="email" placeholder="Email" required />
+        <input type="tel" placeholder="Telefone" required />
+        <input type="password" placeholder="Senha" required />
+        <input type="password" placeholder="Confirmar Senha" required />
+        <button type="submit">Finalizar Cadastro</button>
+      </form>
+    </div>
   </div>
+
+  <script src="../JS/main.js"></script>
 </body>
 </html>
