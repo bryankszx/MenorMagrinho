@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../CSS/cadastroturma.css" />
+  <script src="../JS/cadastroturma.js"defer></script>
+  <title>Cadastro Turma</title>
+</head>
+<body>
+  <div class="container">
+    <div class="overlay"></div>
+    <div class="content-wrapper"></div>
+    <div class="form-box">
+      <h1>CADASTRO TURMA</h1>
+      <form id="cadastroForm">
+        <div class="image-card"><img src="" alt="FOTO"></div>
+
+        <input type="text" id="nome" name="nome" placeholder="Nome da turma" required />
+
+        <select id="curso" name="curso_id" required>
+          <option value="" disabled selected>Selecione o curso</option>
+        </select>
+
+        <label for="inicio">Ano Início</label>
+        <input type="date" id="inicio" name="ano_inicio" required />
+
+        <label for="termino">Ano Término</label>
+        <input type="date" id="termino" name="ano_termino" required />
+
+        <input type="number" id="quantidade" name="quantidade_maxima" placeholder="Quantidade máxima" required />
+
+        <button type="submit">Finalizar Cadastro</button>
+      </form>
+    </div>
+  </div>
+
+  
+</body>
+</html>
