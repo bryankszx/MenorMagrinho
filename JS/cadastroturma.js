@@ -20,7 +20,7 @@
 
   } catch (error) {
     console.error("Erro ao carregar cursos:", error);
-    alert("Não foi possível carregar os cursos.");
+    // alert("Não foi possível carregar os cursos.");
   }
 }
 
