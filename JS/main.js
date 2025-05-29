@@ -1,10 +1,15 @@
 // Carregar cargos da API
 async function carregarCargos() {
   try {
-    const resposta = await fetch("http://10.107.144.19:8080/v1/registro-ocorrencias/cargo");
-    const cargos = await resposta.json();
+    const resposta = await fetch("http://localhost:8080/v1/registro-ocorrencias/cargo");
+    const respostaJson = await resposta.json();
+
+    console.log("Resposta da API:", respostaJson);
+
+    const cargos = respostaJson.cargos || [];
 
     const select = document.getElementById("cargo");
+
     cargos.forEach(cargo => {
       const option = document.createElement("option");
       option.value = cargo.id;
@@ -12,33 +17,35 @@ async function carregarCargos() {
       select.appendChild(option);
     });
   } catch (error) {
-    console.error("Erro ao carregar cargos:");
+    console.error("Erro ao carregar cargos:", error);
     alert("Não foi possível carregar os cargos.");
   }
 }
+
 
 // Enviar dados do formulário
 document.getElementById("cadastroForm").addEventListener("submit", async function (event) {
   event.preventDefault();
 
-  const senha = document.getElementById("senha").value;
-  const confirmarSenha = document.getElementById("confirmarSenha").value;
+  const idEducador = parseInt(document.getElementById("id").value);
+  const idCargo = parseInt(document.getElementById("cargo").value);
 
-  if (senha !== confirmarSenha) {
-    alert("As senhas não coincidem.");
+  if (isNaN(idEducador) || isNaN(idCargo)) {
+    alert("ID do educador e cargo devem ser números válidos.");
     return;
   }
 
   const dados = {
+    id: idEducador,
     nome: document.getElementById("nome").value.trim(),
     email: document.getElementById("email").value.trim(),
-    telefone: document.getElementById("telefone").value.trim(),
-    senha: senha,
-    id_cargo: parseInt(document.getElementById("cargo").value)
+    senha: document.getElementById("senha").value,
+    palavra_chave: document.getElementById("keyword").value.trim(),
+    id_cargo: idCargo
   };
 
   try {
-    const resposta = await fetch("http://10.107.144.19:8080/v1/registro-ocorrencias/educador", {
+    const resposta = await fetch("http://localhost:8080/v1/registro-ocorrencias/educador", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dados)
@@ -46,11 +53,11 @@ document.getElementById("cadastroForm").addEventListener("submit", async functio
 
     const data = await resposta.json();
 
-    if (data.status_code === 201) {
+    if (resposta.status === 201) {
       alert("Educador cadastrado com sucesso!");
       document.getElementById("cadastroForm").reset();
     } else {
-      alert("Erro ao cadastrar: " + data.message);
+      alert("Erro ao cadastrar: " + (data.message || "Verifique os dados e tente novamente."));
     }
   } catch (error) {
     console.error("Erro ao cadastrar educador:", error);
