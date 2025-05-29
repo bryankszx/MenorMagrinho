@@ -2,21 +2,22 @@
 async function carregarCargos() {
   try {
     const resposta = await fetch("http://localhost:8080/v1/registro-ocorrencias/cargo");
-    const respostaJson = await resposta.json();
+    const respostaJson = await resposta.json(); //Volta o json 
 
     console.log("Resposta da API:", respostaJson);
 
-    const cargos = respostaJson.cargos || [];
+    const cargos = respostaJson.cargos || []; //Cria uma variável que guarda todos os dados dos cargos que o json retornar
 
-    const select = document.getElementById("cargo");
+    const selecao = document.getElementById("cargo");
 
     cargos.forEach(cargo => {
       const option = document.createElement("option");
-      option.value = cargo.id;
-      option.textContent = cargo.nome;
-      select.appendChild(option);
+      option.value = cargo.id; //O valor do options será o id dos cargos que o json enviar
+      option.textContent = cargo.nome; //O texto do options será o nome dos cargos que o json enviar
+      selecao.appendChild(option);  //Adiciona o options na caixa de seleção
     });
   } catch (error) {
+    console.error("Erro ao carregar cargos:");
     console.error("Erro ao carregar cargos:", error);
     alert("Não foi possível carregar os cargos.");
   }
@@ -24,23 +25,26 @@ async function carregarCargos() {
 
 
 // Enviar dados do formulário
+//Submit -> ação de enviar um formulário e validar os dados antes de enviar
 document.getElementById("cadastroForm").addEventListener("submit", async function (event) {
-  event.preventDefault();
+  event.preventDefault(); 
 
-  const idEducador = parseInt(document.getElementById("id").value);
+  const senha = document.getElementById("senha").value;
+  const confirmarSenha = document.getElementById("confirmarSenha").value;
   const idCargo = parseInt(document.getElementById("cargo").value);
 
-  if (isNaN(idEducador) || isNaN(idCargo)) {
-    alert("ID do educador e cargo devem ser números válidos.");
+  console.log(idCargo)
+
+  if (senha !== confirmarSenha) {
+    alert("As senhas não coincidem.");
     return;
   }
 
   const dados = {
-    id: idEducador,
-    nome: document.getElementById("nome").value.trim(),
-    email: document.getElementById("email").value.trim(),
+    nome: document.getElementById("nome").value,
+    email: document.getElementById("email").value,
     senha: document.getElementById("senha").value,
-    palavra_chave: document.getElementById("keyword").value.trim(),
+    palavra_chave: document.getElementById("keyword").value,
     id_cargo: idCargo
   };
 
@@ -53,16 +57,18 @@ document.getElementById("cadastroForm").addEventListener("submit", async functio
 
     const data = await resposta.json();
 
+    if (data.status_code === 201) {
     if (resposta.status === 201) {
       alert("Educador cadastrado com sucesso!");
       document.getElementById("cadastroForm").reset();
     } else {
+      alert("Erro ao cadastrar: " + data.message);
       alert("Erro ao cadastrar: " + (data.message || "Verifique os dados e tente novamente."));
     }
-  } catch (error) {
+    }
+  }catch (error) {
     console.error("Erro ao cadastrar educador:", error);
-    alert("Erro ao conectar com a API.");
-  }
+}
 });
 
 // Executar carregamento ao abrir a página
