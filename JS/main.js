@@ -1,7 +1,7 @@
 // Carregar cargos da API
 async function carregarCargos() {
   try {
-    const resposta = await fetch("http://localhost:8080/v1/registro-ocorrencias/cargo");
+    const resposta = await fetch("http://10.107.134.24:8080/v1/registro-ocorrencias/cargo");
     const respostaJson = await resposta.json(); //Volta o json 
 
     console.log("Resposta da API:", respostaJson);
@@ -49,27 +49,28 @@ document.getElementById("cadastroForm").addEventListener("submit", async functio
   };
 
   try {
-    const resposta = await fetch("http://localhost:8080/v1/registro-ocorrencias/educador", {
+    const resposta = await fetch("http://10.107.134.24:8080/v1/registro-ocorrencias/educador", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dados)
     });
-
+  
     const data = await resposta.json();
-
-    if (data.status_code === 201) {
+  
+    console.log("Resposta do servidor:", data);
+  
     if (resposta.status === 201) {
       alert("Educador cadastrado com sucesso!");
       document.getElementById("cadastroForm").reset();
     } else {
-      alert("Erro ao cadastrar: " + data.message);
       alert("Erro ao cadastrar: " + (data.message || "Verifique os dados e tente novamente."));
     }
-    }
-  }catch (error) {
+  
+  } catch (error) {
     console.error("Erro ao cadastrar educador:", error);
-}
-});
-
+    alert("Não foi possível conectar com o servidor.");
+  }
+  
+})
 // Executar carregamento ao abrir a página
 carregarCargos();
