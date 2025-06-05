@@ -57,16 +57,25 @@
     justify-content: center;
     display: flex;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 600px;
-    margin-top: 20px;
+    gap: 27px;
+    margin-top: 50px;
   }
   
   .card {
-    background-color: #944e4e;
-    width: 400px;
-    height: 400px;
-    border-radius: 10px;
-  }
+    
+        background-color: #944e4e;
+        height:400px;
+        width: 400px;
+        border-radius: 10px;
+        padding: 10px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+      }
+      
+
   
   .add-button {
     position: absolute;
@@ -84,4 +93,16 @@
   .add-button:hover {
     background-color: #330707;
   }
+
+  
+  .card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+  }
+  
+  .card span {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+  
   
