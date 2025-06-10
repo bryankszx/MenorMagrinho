@@ -54,26 +54,30 @@
   }
   
   .card-grid {
-    justify-content: center;
     display: flex;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 27px;
     margin-top: 50px;
+    flex-wrap: wrap;
   }
   
   .card {
-    
-        background-color: #944e4e;
-        height:400px;
-        width: 400px;
-        border-radius: 10px;
-        padding: 10px;
-        color: white;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        text-align: center;
-      }
+    background-color: #944e4e;
+    height:200px;
+    width: 200px;
+    border-radius: 10px;
+    gap: 8px;
+    padding: 10px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .card img{
+    height: 8vh;
+    width: 8vh;
+  }
       
 
   
@@ -95,14 +99,6 @@
   }
 
   
-  .card h3 {
-    font-size: 1.1rem;
-    margin-bottom: 8px;
-  }
-  
-  .card span {
-    font-size: 0.9rem;
-    opacity: 0.9;
-  }
+
   
   

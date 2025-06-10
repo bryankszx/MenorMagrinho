@@ -20,6 +20,14 @@ async function carregarAlunos() {
       const card = document.createElement("div");
       card.classList.add("card");
 
+      // Img
+      const img = document.createElement("img");
+      img.src = "../IMGS/user.png"
+      card.appendChild(img)
+
+      const div2 = document.createElement("div")
+      div2.classList.add("div2")
+
       // Nome
       const nome = document.createElement("h3");
       nome.textContent = aluno.nome;
@@ -28,18 +36,16 @@ async function carregarAlunos() {
       // Matrícula
       const matricula = document.createElement("p");
       matricula.textContent = `Matrícula: ${aluno.matricula}`;
-      card.appendChild(matricula);
+      div2.appendChild(matricula);
 
       // Data de nascimento (formatada)
       const nascimento = document.createElement("p");
       const data = new Date(aluno.data_nascimento);
       nascimento.textContent = `Nasc.: ${data.toLocaleDateString('pt-BR')}`;
-      card.appendChild(nascimento);
+      div2.appendChild(nascimento);
 
-      // Número de turmas (quantidade de turmas no array)
-      const qtdTurmas = document.createElement("p");
-      qtdTurmas.textContent = `Turmas: ${aluno.turmas.length}`;
-      card.appendChild(qtdTurmas);
+      
+      card.appendChild(div2)
 
       // Adiciona o card ao container
       container.appendChild(card);
