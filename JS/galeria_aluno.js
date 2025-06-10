@@ -1,42 +1,54 @@
-async function carregarTurmas() {
+async function carregarAlunos() {
   try {
-    const resposta = await fetch("http://localhost:8080/v1/registro-ocorrencias/alunos");
+    const resposta = await fetch("http://10.107.134.29:8080/v1/registro-ocorrencias/alunos");
     const respostaJson = await resposta.json();
 
     console.log("Resposta da API:", respostaJson);
 
-   
-  
-  
+    // A chave correta é 'alunos', que é um array
+    const lista = respostaJson.alunos || [];
 
-    respostaJson.turmas.forEach((turma) => {
-      const container = document.getElementById('card-grid')
-      console.log(turma)
+    const container = document.getElementById('card-grid');
+
+    // Remove cards antigos
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
+
+    // Para cada aluno, cria um card
+    lista.forEach(aluno => {
       const card = document.createElement("div");
       card.classList.add("card");
 
+      // Nome
       const nome = document.createElement("h3");
-      nome.textContent = turma.nome;
-
-      const curso = document.createElement("p");
-      curso.textContent = `Curso: ${turma.curso}`;
-
-      const periodo = document.createElement("p");
-      periodo.textContent = `Período: ${turma.periodo}`;
-
-      const maxAlunos = document.createElement("p");
-      maxAlunos.textContent = `Máx. Alunos: ${turma.max_alunos}`; // ✅ Aqui está o ajuste
-
+      nome.textContent = aluno.nome;
       card.appendChild(nome);
-      card.appendChild(curso);
-      card.appendChild(periodo);
-      card.appendChild(maxAlunos);
+
+      // Matrícula
+      const matricula = document.createElement("p");
+      matricula.textContent = `Matrícula: ${aluno.matricula}`;
+      card.appendChild(matricula);
+
+      // Data de nascimento (formatada)
+      const nascimento = document.createElement("p");
+      const data = new Date(aluno.data_nascimento);
+      nascimento.textContent = `Nasc.: ${data.toLocaleDateString('pt-BR')}`;
+      card.appendChild(nascimento);
+
+      // Número de turmas (quantidade de turmas no array)
+      const qtdTurmas = document.createElement("p");
+      qtdTurmas.textContent = `Turmas: ${aluno.turmas.length}`;
+      card.appendChild(qtdTurmas);
+
+      // Adiciona o card ao container
       container.appendChild(card);
     });
+
   } catch (erro) {
-    console.error("Erro ao buscar turmas:", erro);
-    alert("Erro ao buscar turmas da API.");
+    console.error("Erro ao buscar Alunos:", erro);
+    alert("Erro ao buscar alunos da API.");
   }
 }
 
-carregarTurmas();
+carregarAlunos();

@@ -1,6 +1,6 @@
 async function carregarTurmas() {
   try {
-    const resposta = await fetch("http://localhost:8080/v1/registro-ocorrencias/turma");
+    const resposta = await fetch("http://10.107.134.29:8080/v1/registro-ocorrencias/turma");
     const respostaJson = await resposta.json();
 
     console.log("Resposta da API:", respostaJson);
