@@ -5,17 +5,19 @@ async function carregarTurmas() {
 
     console.log("Resposta da API:", respostaJson);
 
-   
-  
-  
-
     respostaJson.turmas.forEach((turma) => {
       const container = document.getElementById('card-grid')
       console.log(turma)
       const card = document.createElement("div");
       card.classList.add("card");
 
-      const nome = document.createElement("h3");
+      const img = document.createElement("img");
+      img.src = "../IMGS/senai.png"
+
+      const div2 = document.createElement("div")
+      div2.classList.add("div2")
+
+      const nome = document.createElement("h2");
       nome.textContent = turma.nome;
 
       const curso = document.createElement("p");
@@ -24,13 +26,13 @@ async function carregarTurmas() {
       const periodo = document.createElement("p");
       periodo.textContent = `Período: ${turma.periodo}`;
 
-      const maxAlunos = document.createElement("p");
-      maxAlunos.textContent = `Máx. Alunos: ${turma.max_alunos}`; // ✅ Aqui está o ajuste
+      div2.appendChild(curso)
+      div2.appendChild(periodo);
 
+      card.appendChild(img)
       card.appendChild(nome);
-      card.appendChild(curso);
-      card.appendChild(periodo);
-      card.appendChild(maxAlunos);
+      card.appendChild(div2);
+  
       container.appendChild(card);
     });
   } catch (erro) {
