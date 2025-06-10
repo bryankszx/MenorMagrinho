@@ -41,4 +41,30 @@ async function carregarTurmas() {
   }
 }
 
+async function buscarPeloId(){
+    
+  const url = `http://10.107.134.29:8080/v1/registro-ocorrencias/turma/:${id}`
+
+  //Pede para o fetch fazer uma requisição na url
+  const response = await fetch(url)
+
+  const data = await response.json()
+
+  console.log(data)
+
+  return data
+}
+
+async function exibirPesquisa(evento){
+  const container = document.getElementById('card-grid')
+  if(evento.key == 'Enter'){
+      container.replaceChildren()
+      const alunos = await buscarPeloId(evento.target.value)
+      alunos.forEach(criarCard)
+  }
+}
+
 carregarTurmas();
+
+document.getElementById('input').addEventListener('keydown', exibirPesquisa)
+
