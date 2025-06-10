@@ -23,7 +23,7 @@ document.getElementById("cadastroForm").addEventListener("submit", async functio
   console.log("Aluno a ser enviado:", aluno);
 
   try {
-    const resposta = await fetch("http://10.107.134.29:8080/v1/registro-ocorrencias/alunos", {
+    const resposta = await fetch("http://10.107.134.33:8080/v1/registro-ocorrencias/alunos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(aluno)

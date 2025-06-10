@@ -1,7 +1,7 @@
 // Carregar cargos da API
 async function carregarCargos() {
   try {
-    const resposta = await fetch("http://10.107.134.29:8080/v1/registro-ocorrencias/cargo");
+    const resposta = await fetch("http://10.107.134.33:8080/v1/registro-ocorrencias/cargo");
     const respostaJson = await resposta.json(); //Volta o json 
 
     console.log("Resposta da API:", respostaJson);
@@ -49,7 +49,7 @@ document.getElementById("cadastroForm").addEventListener("submit", async functio
   };
 
   try {
-    const resposta = await fetch("http://10.107.134.24:8080/v1/registro-ocorrencias/educador", {
+    const resposta = await fetch("http://10.107.134.33:8080/v1/registro-ocorrencias/educador", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dados)
