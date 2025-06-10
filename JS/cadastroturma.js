@@ -21,7 +21,7 @@ document.getElementById("cadastroForm").addEventListener("submit", async functio
   console.log("Dados enviados:", JSON.stringify(dados, null, 2));
 
   try {
-    const resposta = await fetch("http://10.107.134.33:8080/v1/registro-ocorrencias/turma", {
+    const resposta = await fetch("http://10.107.134.29:8080/v1/registro-ocorrencias/turma", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dados)

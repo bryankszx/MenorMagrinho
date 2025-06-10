@@ -1,6 +1,6 @@
 async function carregarAlunos() {
   try {
-    const resposta = await fetch("http://10.107.134.33:8080/v1/registro-ocorrencias/alunos");
+    const resposta = await fetch("http://10.107.134.29:8080/v1/registro-ocorrencias/alunos");
     const respostaJson = await resposta.json();
 
     console.log("Resposta da API:", respostaJson);
