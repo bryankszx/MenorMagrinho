@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../CSS/add_registro.css">
+    <title>Adicionar Ocorrência</title>
+</head>
+<body>
+    <div class="container">
+        <div class="form-box">
+          
+            <div class="form-content">
+              <h1>Registrar </h1>
+              <form>
+                <div class="row">
+                 <div class="tipo" id="type">
+                    <select required>
+                        <option value=""disabled selected> Tipo de Ocorrência</option>
+                        <option value=""> Briga</option> 
+                        <option value=""> Não Cumprimento de regras</option>
+                        <option value=""> Não fez atividade</option>
+                        <option value=""> É feeio</option>
+
+                    </select>
+                 </div>
+                </div>
+          
+                <div class="row">
+                    <div class="gravidade">
+                        <select required>
+                          <option value="" disabled selected>Gravidade</option>
+                          <option value=""> Grave</option>
+                          <option value="">Leve</option>
+                        </select>             
+                      </div>              
+                </div>
+                <div class="history-field">
+                    <textarea id="historico" placeholder="Histórico de Ocorrências"></textarea>
+                  </div>                  
+                <button type="submit">Registrar ocorrência</button>
+              </form>
+            </div>
+          </div>
+          
+    
+                </form>
+        </div>
+      </div>
+</body>
+</html>
