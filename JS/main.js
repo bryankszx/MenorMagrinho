@@ -1,7 +1,7 @@
 // Carregar cargos da API
 async function carregarCargos() {
   try {
-    const resposta = await fetch("http://localhost:8080/v1/registro-ocorrencias/cargo");
+    const resposta = await fetch("http://:8080/v1/registro-ocorrencias/cargo");
     const respostaJson = await resposta.json(); //Volta o json 
 
     console.log("Resposta da API:", respostaJson);

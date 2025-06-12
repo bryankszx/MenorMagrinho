@@ -1,53 +1,65 @@
 async function init() {
-    const matriculaInput = document.getElementById("matricula");
-  
-    matriculaInput.addEventListener("blur", async () => {
-      const matricula = matriculaInput.value.trim();
-      if (matricula) {
-        await buscarAlunoPorMatricula(matricula);
-      }
-    });
-  }
-  
-  async function buscarAlunoPorMatricula(matricula) {
-    try {
-      const response = await fetch("http://localhost:8080/v1/registro-ocorrencias/turma/:${id}");
-      const resultado = await response.json();
-  
-      if (!resultado.status || !Array.isArray(resultado.alunos)) {
-        alert("Erro no retorno da API.");
-        return;
-      }
-  
-      const aluno = resultado.alunos.find(a => a.matricula === matricula);
-  
-      if (!aluno) {
-        alert("Aluno não encontrado.");
-        return;
-      }
-  
-      // Preencher os campos do formulário
-      document.querySelector("input[placeholder='Nome Completo']").value = aluno.nome;
-  
-      const nascimento = new Date(aluno.data_nascimento);
-      document.querySelector("input[placeholder='DD/MM/AAAA']").value = nascimento.toLocaleDateString("pt-BR");
-  
-      if (aluno.turmas && aluno.turmas.length > 0) {
-        const turma = aluno.turmas[0];
-        document.querySelector("select[name='turma']").value = turma.nome.slice(-1); // Ex: "3-A" → "A"
-        document.querySelector("select[name='curso']").value = turma.curso;
-      }
-  
-      // Histórico de Ocorrências
-      if (aluno.ocorrencias) {
-        document.querySelector("textarea[placeholder='Histórico de Ocorrências']").value = aluno.ocorrencias.join("\n");
-      }
-    } catch (error) {
-      console.error("Erro ao buscar dados:", error);
-      alert("Erro ao buscar dados do aluno.");
+  try {
+    const response = await fetch("http://localhost:8080/v1/registro-ocorrencias/alunos");
+    const resultado = await response.json();
+
+    console.log("Dados recebidos da API:", resultado);
+
+    if (!resultado.status || !Array.isArray(resultado.alunos)) {
+      alert("Erro no retorno da API.");
+      return;
     }
+
+    const aluno = resultado.alunos[0];
+    if (!aluno) {
+      alert("Nenhum aluno encontrado.");
+      return;
+    }
+
+    document.getElementById("nome").value = aluno.nome || "";
+    document.getElementById("matricula").value = aluno.matricula || "";
+
+    if (aluno.data_nascimento) {
+      const nascimento = new Date(aluno.data_nascimento);
+      const dia = String(nascimento.getDate()).padStart(2, "0");
+      const mes = String(nascimento.getMonth() + 1).padStart(2, "0");
+      const ano = nascimento.getFullYear();
+      document.getElementById("ano").value = `${dia}/${mes}/${ano}`;
+    } else {
+      document.getElementById("ano").value = "";
+    }
+
+    // Exibe todas as turmas do aluno no console
+    console.log("Turmas do aluno:", aluno.turmas);
+
+    if (aluno.turmas && aluno.turmas.length > 0) {
+      // Preenche com a primeira turma como antes
+      const primeiraTurma = aluno.turmas[0];
+      document.getElementById("turma").value = primeiraTurma.nome ? primeiraTurma.nome.slice(-1) : "";
+      document.getElementById("curso").value = primeiraTurma.curso || "";
+
+      // Monta uma string listando todas as turmas
+      const listaTurmas = aluno.turmas
+        .map(t => `Nome: ${t.nome}, Período: ${t.periodo}, Curso: ${t.curso}, Máx alunos: ${t.max_alunos}`)
+        .join("\n");
+
+      // Exemplo: coloca essa lista numa textarea ou div com id="listaTurmas"
+      const listaTurmasElement = document.getElementById("listaTurmas");
+      if (listaTurmasElement) {
+        listaTurmasElement.textContent = listaTurmas;
+      }
+    } else {
+      document.getElementById("turma").value = "";
+      document.getElementById("curso").value = "";
+      const listaTurmasElement = document.getElementById("listaTurmas");
+      if (listaTurmasElement) {
+        listaTurmasElement.textContent = "Nenhuma turma cadastrada.";
+      }
+    }
+  } catch (error) {
+    console.error("Erro ao buscar dados:", error);
+    alert("Erro ao buscar dados do aluno.");
   }
-  
-  // Chamar a função principal quando o DOM estiver carregado
-  document.addEventListener("DOMContentLoaded", init);
-  
+}
+
+document.addEventListener("DOMContentLoaded", init);
