@@ -11,7 +11,7 @@ async function init() {
   
   async function buscarAlunoPorMatricula(matricula) {
     try {
-      const response = await fetch("URL_DO_ENDPOINT_DE_ALUNOS");
+      const response = await fetch("http://localhost:8080/v1/registro-ocorrencias/turma/:${id}");
       const resultado = await response.json();
   
       if (!resultado.status || !Array.isArray(resultado.alunos)) {
