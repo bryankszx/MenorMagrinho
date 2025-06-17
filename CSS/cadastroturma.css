@@ -20,7 +20,7 @@ h1 {
   position: relative;
   width: 100%;
   height: 100vh;
-  background-image: url('../IMGS/Educador-Social.png');
+  background-image: url('../IMGS/fundo.png');
   background-size: cover;
   background-position: center;
   display: flex;

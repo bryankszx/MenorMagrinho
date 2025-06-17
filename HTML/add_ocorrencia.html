@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../CSS/add_registro.css">
+    <title>Adicionar Ocorrência</title>
+</head>
+<body>
+    <div class="container">
+        <div class="form-box">
+            <div class="form-content">
+                <h1>Registrar Ocorrência</h1>
+                <form id="ocorrenciaForm">
+                    <div class="row">
+                        <div class="tipo" id="type">
+                            <select id="tipoOcorrencia" required>
+                                <option value="" disabled selected>Tipo de Ocorrência</option>
+                                <option value="BRIGA">Briga</option>
+                                <option value="REGRA">Não Cumprimento de regras</option>
+                                <option value="ATIVIDADE">Não fez atividade</option>
+                                <option value="COMPORTAMENTO">Comportamento inadequado</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="gravidade">
+                            <select id="gravidade" required>
+                                <option value="" disabled selected>Gravidade</option>
+                                <option value="GRAVE">Grave</option>
+                                <option value="LEVE">Leve</option>
+                            </select>             
+                        </div>              
+                    </div>
+
+                    <div class="history-field">
+                        <textarea id="historico" placeholder="Histórico de Ocorrências" required></textarea>
+                    </div>
+
+                   
+                    <button type="submit">Registrar ocorrência</button>
+                    <div id="mensagem"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../JS/add_registro.js"></script>
+</body>
+</html>

@@ -4,46 +4,45 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="../CSS/registro_ocorrencia.css" />
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="../JS/registro_ocorrencia.js" defer></script>
   <title>Cadastro de Ocorrência</title>
 </head>
 <body>
   <div class="container">
     <div class="form-box">
-        <div class="red-circle"></div>
-      
-        <div class="form-content">
-          <h1>ALUNO </h1>
-          <form>
-            <input type="text" placeholder="Nome Completo" required />
-      
-            <div class="row">
-              <input id="matricula"  type="text" placeholder="N de matrícula" required />
-              <input id="ano" type="text" placeholder="DD/MM/AAAA" required />
-            </div>
-      
-            <div class="row">
-              <input id="turma"   type="text" placeholder="Turma" required />
-              <div class="dropdown-container">
-                <select required>
-                  <option value="" disabled selected>Curso</option>
-                  <option value="Curso A">Curso A</option>
-                  <option value="Curso B">Curso B</option>
-                </select>
-             
-              </div>
-            </div>
-      
-            <div class="history-field">
-              <input id="historico" type="text" placeholder="Histórico de Ocorrências" />
-            </div>
-            <button type="submit">Registrar nova ocorrência</button>
-          </form>
-        </div>
-      </div>
-      
+      <div class="red-circle"></div>
 
-            </form>
+      <div class="form-content">
+        <h1>ALUNO</h1>
+        <form>
+          <!-- Dados do aluno -->
+          <input id="nome" type="text" placeholder="Nome Completo" required />
+
+          <div class="row">
+            <input id="matricula" type="text" placeholder="Nº de matrícula" required />
+            <input id="ano" type="text" placeholder="DD/MM/AAAA" required />
+          </div>
+
+          <div class="row">
+            <input id="turma" type="text" placeholder="Turma" required />
+            <input id="curso" type="text" placeholder="Curso" required />
+          </div>
+
+          <!-- Histórico de ocorrências existentes -->
+          <div class="history-box">
+            <h3>Histórico de Ocorrências</h3>
+            <pre id="relato">Nenhuma ocorrência encontrada.</pre>
+          </div>
+
+          <!-- Lista de turmas (se desejar exibir todas) -->
+          <div class="turma-box">
+            <h3>Detalhes das Turmas</h3>
+            <pre id="listaTurmas">Sem dados de turma.</pre>
+          </div>
+
+          <button type="submit">Registrar nova ocorrência</button>
+        </form>
+      </div>
     </div>
   </div>
 </body>
