@@ -1,105 +1,155 @@
+// Função para capturar parâmetros da URL
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+// Função principal que é executada quando a página carrega
 async function init() {
     try {
-      // Buscar dados dos alunos
-      const response = await fetch("http://10.107.134.37:8080/v1/registro-ocorrencias/alunos");
-      const resultado = await response.json();
-  
-      console.log("Dados recebidos da API:", resultado);
-  
-      if (!resultado.status || !Array.isArray(resultado.alunos)) {
-        alert("Erro no retorno da API.");
-        return;
-      }
-  
-      const aluno = resultado.alunos[0];
-      if (!aluno) {
-        alert("Nenhum aluno encontrado.");
-        return;
-      }
-  
-      document.getElementById("nome").value = aluno.nome || "";
-      document.getElementById("matricula").value = aluno.matricula || "";
-  
-      if (aluno.data_nascimento) {
-        const nascimento = new Date(aluno.data_nascimento);
-        const dia = String(nascimento.getDate()).padStart(2, "0");
-        const mes = String(nascimento.getMonth() + 1).padStart(2, "0");
-        const ano = nascimento.getFullYear();
-        document.getElementById("ano").value = `${dia}/${mes}/${ano}`;
-      } else {
-        document.getElementById("ano").value = "";
-      }
-  
-      // Exibe todas as turmas do aluno no console
-      console.log("Turmas do aluno:", aluno.turmas);
-  
-      if (aluno.turmas && aluno.turmas.length > 0) {
-        const primeiraTurma = aluno.turmas[0];
-        document.getElementById("turma").value = primeiraTurma.nome ? primeiraTurma.nome.slice(-1) : "";
-        document.getElementById("curso").value = primeiraTurma.curso || "";
-  
-        const listaTurmas = aluno.turmas
-          .map(t => `Nome: ${t.nome}, Período: ${t.periodo}, Curso: ${t.curso}, Máx alunos: ${t.max_alunos}`)
-          .join("\n");
-  
-        const listaTurmasElement = document.getElementById("listaTurmas");
-        if (listaTurmasElement) {
-          listaTurmasElement.textContent = listaTurmas;
+        console.log('Iniciando carregamento da página...');
+        
+        const matriculaSelecionada = getQueryParam("matricula");
+        console.log('Matrícula capturada da URL:', matriculaSelecionada);
+        
+        if (!matriculaSelecionada) {
+            console.error('Nenhuma matrícula fornecida na URL');
+            return;
         }
-      } else {
-        document.getElementById("turma").value = "";
-        document.getElementById("curso").value = "";
-        const listaTurmasElement = document.getElementById("listaTurmas");
-        if (listaTurmasElement) {
-          listaTurmasElement.textContent = "Nenhuma turma cadastrada.";
+
+        // 1. BUSCAR DADOS DO ALUNO
+        console.log('Iniciando busca dos dados do aluno...');
+        const responseAluno = await fetch("http://10.107.134.37:8080/v1/registro-ocorrencias/alunos");
+        
+        if (!responseAluno.ok) {
+            throw new Error(`Erro na requisição: ${responseAluno.status}`);
         }
-      }
-  
-      // 🔥 Buscar os registros de ocorrência (apenas relatos)
-      buscarRelatoOcorrencia(aluno.matricula);
-  
+        
+        const resultadoAluno = await responseAluno.json();
+        console.log('Dados brutos da API de alunos:', resultadoAluno);
+
+        if (!resultadoAluno.status || !Array.isArray(resultadoAluno.alunos)) {
+            console.error('Estrutura de dados inesperada da API de alunos');
+            return;
+        }
+
+        const aluno = resultadoAluno.alunos.find(a => {
+            console.log(`Comparando: ${a.matricula} com ${matriculaSelecionada}`);
+            return String(a.matricula) === String(matriculaSelecionada);
+        });
+        
+        console.log('Aluno encontrado:', aluno);
+        
+        if (!aluno) {
+            document.getElementById("relato").textContent = "Aluno não encontrado";
+            return;
+        }
+
+        // Preenche os dados do aluno
+        document.getElementById("nome").value = aluno.nome || "";
+        document.getElementById("matricula").value = aluno.matricula || "";
+
+        if (aluno.data_nascimento) {
+            document.getElementById("ano").value = formatarData(aluno.data_nascimento);
+        }
+
+        // Preenche turmas (se existirem)
+        if (aluno.turmas?.length > 0) {
+            const primeiraTurma = aluno.turmas[0];
+            document.getElementById("turma").value = primeiraTurma.nome?.slice(-1) || "";
+            document.getElementById("curso").value = primeiraTurma.curso || "";
+            
+            // Exibe todas as turmas no campo específico
+            const turmasFormatadas = aluno.turmas.map(t => 
+                `Turma: ${t.nome || 'N/A'}\nCurso: ${t.curso || 'N/A'}\nTurno: ${t.turno || 'N/A'}\n───────────────`
+            ).join('\n');
+            
+            document.getElementById("listaTurmas").textContent = turmasFormatadas || "Sem dados de turma";
+        }
+
+        // 2. BUSCAR OCORRÊNCIAS
+        console.log('Iniciando busca de ocorrências...');
+        await buscarRelatoOcorrencia(aluno.matricula);
+
     } catch (error) {
-      console.error("Erro ao buscar dados:", error);
-      alert("Erro ao buscar dados do aluno.");
+        console.error("Erro fatal:", error);
+        document.getElementById("relato").textContent = "Erro ao carregar dados do aluno";
     }
-  }
-  
-  // 🔥 Função para buscar os registros de ocorrência e exibir o relato
-  async function buscarRelatoOcorrencia(matricula) {
+}
+
+// Função para buscar ocorrências
+// Função para buscar ocorrências
+async function buscarRelatoOcorrencia(matricula) {
     try {
-      const response = await fetch("http://10.107.134.37:8080/v1/registro-ocorrencias/ocorrencia");
-      const resultado = await response.json();
-  
-      console.log("Ocorrências recebidas da API:", resultado);
-  
-      if (!Array.isArray(resultado.ocorrencia)) {
-        console.error("Formato inválido de ocorrências.");
-        return;
-      }
-  
-      // Filtra ocorrências que possuem o aluno com a matrícula informada
-      const ocorrenciasDoAluno = resultado.ocorrencia.filter(oc =>
-        oc.alunos.some(aluno => aluno.matricula === matricula)
-      );
-  
-      if (ocorrenciasDoAluno.length === 0) {
-        document.getElementById("relato").textContent = "Nenhuma ocorrência registrada.";
-        return;
-      }
-  
-      // Pega os relatos e junta em uma string
-      const relatos = ocorrenciasDoAluno.map(oc => `• ${oc.relato}`).join("\n");
-  
-      // Exibe no elemento com id="relato"
-      const relatoElement = document.getElementById("relato");
-      if (relatoElement) {
-        relatoElement.textContent = relatos;
-      }
+        console.log(`Buscando ocorrências para matrícula: ${matricula}`);
+        
+        const response = await fetch("http://10.107.134.37:8080/v1/registro-ocorrencias/ocorrencia");
+        
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status}`);
+        }
+        
+        const resultado = await response.json();
+        console.log('Dados brutos de ocorrências:', resultado);
+
+        // Verificação do formato dos dados
+        if (!resultado || !resultado.ocorrencia || !Array.isArray(resultado.ocorrencia)) {
+            document.getElementById("relato").textContent = "Formato de dados inválido";
+            return;
+        }
+
+        // Filtra ocorrências do aluno e remove duplicados
+        const ocorrenciasUnicas = [];
+        const textosVistos = new Set();
+        
+        resultado.ocorrencia.forEach(oc => {
+            if (oc.alunos?.some(aluno => String(aluno.matricula) === String(matricula))) {
+                const textoRelato = oc.relato?.trim() || 'Sem descrição da ocorrência';
+                
+                if (!textosVistos.has(textoRelato)) {
+                    textosVistos.add(textoRelato);
+                    ocorrenciasUnicas.push({
+                        relato: textoRelato,
+                        dataOcorrencia: oc.dataOcorrencia
+                    });
+                }
+            }
+        });
+
+        console.log(`Ocorrências únicas encontradas: ${ocorrenciasUnicas.length}`);
+
+        // Atualiza o histórico
+        if (ocorrenciasUnicas.length === 0) {
+            document.getElementById("relato").textContent = "Nenhuma ocorrência registrada para este aluno";
+            return;
+        }
+
+        // Formatação simplificada (apenas relatos únicos)
+        const relatosFormatados = ocorrenciasUnicas.map(oc => oc.relato).join('\n\n');
+
+        document.getElementById("relato").textContent = relatosFormatados;
+
     } catch (error) {
-      console.error("Erro ao buscar ocorrências:", error);
-      alert("Erro ao buscar ocorrências.");
+        console.error("Erro ao buscar ocorrências:", error);
+        document.getElementById("relato").textContent = "Erro ao carregar ocorrências";
     }
-  }
-  
-  document.addEventListener("DOMContentLoaded", init);
-  
+}
+// Função para formatar data
+function formatarData(dataString) {
+    try {
+        const data = new Date(dataString);
+        return data.toLocaleDateString('pt-BR');
+    } catch {
+        return 'Data inválida';
+    }
+}
+
+// Evento do formulário
+document.querySelector("form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const matricula = document.getElementById("matricula").value;
+    window.location.href = `add_ocorrencia.html?matricula=${matricula}`;
+});
+
+// Inicia quando o DOM estiver carregado
+document.addEventListener("DOMContentLoaded", init);
